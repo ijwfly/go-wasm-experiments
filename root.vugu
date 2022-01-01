@@ -1,20 +1,30 @@
 <div>
     <main role="main" class="container text-left">
         <div class="mt-5">
-            <h1>WASM Encryption util</h1>
-            <input type="text" id="inputtext" @change='c.InputText(event)' placeholder="text" />
-            <input type="text" id="inputkey" @change='c.InputPassword(event)' placeholder="password" />
+            <h1>WASM Experiments</h1>
+            <div>
+                <textarea style="height: auto; width: 100%" @change='c.InputText(event)' placeholder="text" rows="10"></textarea>
+            </div>
+            <div>
+                <textarea style="height: auto; width: 100%" @change='c.InputPassword(event)' placeholder="password"></textarea>
+            </div>
+            <div>
+                <button @click="c.Clear(); c.Encrypt()">Encrypt</button>
+                <button @click="c.Clear(); c.Decrypt()">Decrypt</button>
+            </div>
 
-            <button @click="c.Encrypt()">Encrypt</button>
-            <button @click="c.Decrypt()">Decrypt</button>
-
-            <div vg-if='len(c.ShowResult) != 0'>
+            <div vg-if='len(c.ShowResult) != 0 && len(c.ErrorText) == 0'>
                 <p>Original text:</p>
                 <p vg-content='c.ShowText' />
                 <p>Password:</p>
                 <p vg-content='c.ShowKey' />
                 <p>Result:</p>
-                <p vg-content='c.ShowResult' />
+                <textarea style="height: auto; width: 100%" vg-content='c.ShowResult' rows="5"></textarea>
+            </div>
+
+            <div vg-if='len(c.ErrorText) != 0'>
+                <p>Error:</p>
+                <p vg-content='c.ErrorText' />
             </div>
 
         </div>
@@ -26,6 +36,9 @@
 type Root struct {
     inputText string `vugu:"data"`
     inputPassword string `vugu:"data"`
+
+    ErrorText string `vugu:"data"`
+
     ShowText string `vugu:"data"`
     ShowKey string `vugu:"data"`
     ShowResult string `vugu:"data"`

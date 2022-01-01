@@ -16,8 +16,20 @@ func (c *Root) InputPassword(event vugu.DOMEvent) {
 	c.inputPassword = event.JSEvent().Get("target").Get("value").String()
 }
 
+func (c *Root) Clear() {
+	c.ShowText = ""
+	c.ShowResult = ""
+	c.ShowKey = ""
+	c.ErrorText = ""
+}
+
 func (c *Root) Encrypt() {
-	encryptedResult, _ := c.EncryptData(c.inputText, c.inputPassword)
+	encryptedResult, err := c.EncryptData(c.inputText, c.inputPassword)
+	if err != nil {
+		c.ErrorText = err.Error()
+		return
+	}
+
 	b64encoded := base64.StdEncoding.EncodeToString(encryptedResult)
 
 	c.ShowText = c.inputText
@@ -28,9 +40,14 @@ func (c *Root) Encrypt() {
 func (c *Root) Decrypt() {
 	b64decoded, err := base64.StdEncoding.DecodeString(c.inputText)
 	if err != nil {
-		panic("b64 decoding error")
+		c.ErrorText = err.Error()
+		return
 	}
-	decryptedResult, _ := c.DecryptData(b64decoded, c.inputPassword)
+	decryptedResult, err := c.DecryptData(b64decoded, c.inputPassword)
+	if err != nil {
+		c.ErrorText = err.Error()
+		return
+	}
 
 	c.ShowText = c.inputText
 	c.ShowResult = string(decryptedResult)
