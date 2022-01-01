@@ -1,0 +1,34 @@
+<div>
+    <main role="main" class="container text-left">
+        <div class="mt-5">
+            <h1>WASM Encryption util</h1>
+            <input type="text" id="inputtext" @change='c.InputText(event)' placeholder="text" />
+            <input type="text" id="inputkey" @change='c.InputPassword(event)' placeholder="password" />
+
+            <button @click="c.Encrypt()">Encrypt</button>
+            <button @click="c.Decrypt()">Decrypt</button>
+
+            <div vg-if='len(c.ShowResult) != 0'>
+                <p>Original text:</p>
+                <p vg-content='c.ShowText' />
+                <p>Password:</p>
+                <p vg-content='c.ShowKey' />
+                <p>Result:</p>
+                <p vg-content='c.ShowResult' />
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<script type="application/x-go">
+
+type Root struct {
+    inputText string `vugu:"data"`
+    inputPassword string `vugu:"data"`
+    ShowText string `vugu:"data"`
+    ShowKey string `vugu:"data"`
+    ShowResult string `vugu:"data"`
+}
+
+</script>
